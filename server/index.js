@@ -26,6 +26,16 @@ async function startApolloServer() {
       Query: {
         todos: () => [{ id: "1", text: "hello", completed: false }]
       },
+      Mutation:{
+        addTodos: (_, {text}) => {
+          const todo = {
+            id: "2",
+            text,
+            completed: false
+          }
+          return todo;
+        },
+      }
     },
   });
 
