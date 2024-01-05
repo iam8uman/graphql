@@ -8,22 +8,25 @@ async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({
     typeDefs: `
-        type todo{
-            id:ID!
-            text:String!
-            completed:Boolean!            
+        type Todo {
+            id: ID!
+            text: String!
+            completed: Boolean!            
         }
-        type Query{
-            todos:[todo!]!
+        type Query {
+            todos: [Todo]!
         }
-        type Mutation{
-            addTodos(text:String!):todos!
-            updateTodos(id:ID!,completed:Boolean!):todos!
-            deleteTodos(id:ID!):todos!
+        type Mutation {
+            addTodos(text: String!): Todo!
+            updateTodos(id: ID!, completed: Boolean!): Todo!
+            deleteTodos(id: ID!): Todo!
         }
-
-        `,
-    resolvers: {},
+    `,
+    resolvers: {
+      Query: {
+        todos: () => [{ id: "1", text: "hello", completed: false }]
+      },
+    },
   });
 
   app.use(bodyParser.json());
@@ -35,3 +38,5 @@ async function startApolloServer() {
 
   app.listen(5000, () => console.log("Server listening on port 5000!"));
 }
+
+startApolloServer();
