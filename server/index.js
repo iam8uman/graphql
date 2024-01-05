@@ -27,6 +27,7 @@ async function startApolloServer() {
         type Query {
             Posts: [Post]!
             GetallUsers: [User]!
+            GetUserById(id:ID!): User!
         }
         type Mutation {
             addPosts(text: String!): Post!
@@ -38,6 +39,8 @@ async function startApolloServer() {
       Query: {
         Posts: async() => (await axios.get("https://jsonplaceholder.typicode.com/posts")).data,
         GetallUsers: async() => (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
+        GetUserById: async(_, {id}) => (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data,
+
       },
       // Mutation:{
       //   addPosts: (_, {text}) => {
