@@ -3,39 +3,40 @@ const { ApolloServer } = require("@apollo/server");
 const { expressMiddleware } = require("@apollo/server/express4");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { default: axios } = require("axios");
 
 async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({
     typeDefs: `
-        type Todo {
+        type Post {
             id: ID!
-            text: String!
-            completed: Boolean!            
+            title: String!
+            body: String!            
         }
         type Query {
-            todos: [Todo]!
+            Posts: [Post]!
         }
         type Mutation {
-            addTodos(text: String!): Todo!
-            updateTodos(id: ID!, completed: Boolean!): Todo!
-            deleteTodos(id: ID!): Todo!
+            addPosts(text: String!): Post!
+            updatePosts(id: ID!, completed: Boolean!): Post!
+            deletePosts(id: ID!): Post!
         }
     `,
     resolvers: {
       Query: {
-        todos: () => [{ id: "1", text: "hello", completed: false }]
+        Posts: async() => (await axios.get("https://jsonplaceholder.typicode.com/posts")).data
       },
-      Mutation:{
-        addTodos: (_, {text}) => {
-          const todo = {
-            id: "2",
-            text,
-            completed: false
-          }
-          return todo;
-        },
-      }
+      // Mutation:{
+      //   addPosts: (_, {text}) => {
+      //     const Post = {
+      //       id: "2",
+      //       text,
+      //       completed: false
+      //     }
+      //     return Post;
+      //   },
+      // }
     },
   });
 
