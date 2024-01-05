@@ -9,13 +9,24 @@ async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({
     typeDefs: `
-        type Post {
+
+    type User {
+        id: ID!
+        name: String!
+        username: String!
+        email: String!
+        phone: String!
+        website: String!
+    }
+
+    type Post {
             id: ID!
             title: String!
             body: String!            
         }
         type Query {
             Posts: [Post]!
+            GetallUsers: [User]!
         }
         type Mutation {
             addPosts(text: String!): Post!
@@ -25,7 +36,8 @@ async function startApolloServer() {
     `,
     resolvers: {
       Query: {
-        Posts: async() => (await axios.get("https://jsonplaceholder.typicode.com/posts")).data
+        Posts: async() => (await axios.get("https://jsonplaceholder.typicode.com/posts")).data,
+        GetallUsers: async() => (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
       },
       // Mutation:{
       //   addPosts: (_, {text}) => {
