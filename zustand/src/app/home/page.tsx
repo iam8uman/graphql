@@ -1,17 +1,26 @@
-"use client";
+import React, { useState } from 'react';
+import useStore from '@/store/counterState'; // Import the correct path to your Zustand store
 
-import React from 'react'
-import {useCounterStore} from '@/store/CounterState'
+const TodosControl: React.FC = () => {
+  const addTodo = useStore((state) => state.addTodo);
+  const [text, setText] = useState<string>('');
 
-const Page = () => {
-    const { count, increment, decrement } = useCounterStore();
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    addTodo(text);
+    setText('');
+  }
+
   return (
-    <div>
-      <h1>Count: {count+1}</h1>
-      <button onClick={increment} className='button bg-purple-500 rounded-lg text-white m-3 p-3'>Increment</button>
-      <button onClick={decrement} className='button bg-purple-500 rounded-lg text-white m-3 p-3'>Decrement</button>
-    </div>
-  )
-}
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
+};
 
-export default Page
+export default TodosControl;
