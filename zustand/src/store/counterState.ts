@@ -1,13 +1,41 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-interface CounterState {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
 }
 
-export const useCounterStore = create<CounterState>((set) => ({
-  count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  decrement: () => set((state) => ({ count: state.count - 1 })),
+interface TodoStore {
+  todos: Todo[];
+  addTodo: (text: string) => void;
+  toggleTodo: (id: number) => void;
+  deleteTodo: (id: number) => void;
+}
+
+const useStore = create<TodoStore>((set) => ({
+  todos: [],
+  addTodo: (text) =>
+    set((state) => ({
+      todos: [
+        ...state.todos,
+        {
+          id: Date.now(),
+          text,
+          completed: false,
+        },
+      ],
+    })),
+  toggleTodo: (id) =>
+    set((state) => ({
+      todos: state.todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      ),
+    })),
+  deleteTodo: (id) =>
+    set((state) => ({
+      todos: state.todos.filter((todo) => todo.id !== id),
+    })),
 }));
+
+export default useStore;
