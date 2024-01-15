@@ -39,3 +39,6 @@ const useStore = create<TodoStore>((set) => ({
 }));
 
 export default useStore;
+
+
+//email is some some someting
