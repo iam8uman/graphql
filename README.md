@@ -1,3 +1,3 @@
 ### Grphql and Zustand together
 
-Update
+Update and fixed issues
